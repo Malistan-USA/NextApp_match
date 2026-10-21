@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/components/nav/NavBar";
-import { Toast } from "@heroui/react";
-import Providers from "@/components/Providers";
+
+
 
 export const metadata: Metadata = {
   title: "NextMatch",
@@ -17,13 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-background text-foreground">
-        <Providers>
-          <Toast.Provider />
-          <NavBar />
-          <main className="container mx-auto mt-24">
-            {children}
-          </main>
-        </Providers>
+        <NavBar />
+        <main className="container mx-auto mt-24">
+          {children}
+        </main>
+
       </body>
     </html>
   );
