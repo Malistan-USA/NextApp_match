@@ -1,7 +1,41 @@
 
+import { getSessionCookie } from 'better-auth/cookies'
 import { NextRequest, NextResponse } from "next/server";
 
-export function proxy(_request: NextRequest) {
+
+const publicRoutes = [
+    '/'
+]
+
+const authRoutes = [
+    '/login',
+    '/register'
+]
+
+export function proxy(request: NextRequest) {
+
+    const { nextUrl } = request;
+
+
+    const sessionCookie = getSessionCookie(request);
+
+    const isPublic = publicRoutes.includes(nextUrl.pathname);
+    const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
+    if (isPublic) return NextResponse.next();
+
+    if (isAuthRoute) {
+        if (sessionCookie) {
+            return NextResponse.redirect(new URL('/members', nextUrl));
+        }
+
+        return NextResponse.next();
+    }
+
+    if (!sessionCookie && !isPublic) {
+        return NextResponse.redirect(new URL("/login", nextUrl))
+    }
+
     return NextResponse.next();
 }
 
